@@ -1,5 +1,3 @@
-// import { useState } from "react";
-// import { defaultImage, defaultVideo } from "../RichContent";
 import { uploadImage } from "../../../methods/uploadImage";
 import { RC, IRC } from "../RichContent";
 import styles from "../RichContent.module.scss";
@@ -44,10 +42,10 @@ export const EditPanel = ({
           Text align
           <select
             onChange={(e) =>{
-              data.textAlign = e.target.value
+              data.style = Object.assign({}, data.style, {textAlign: e.target.value})
               setCurrentData(item.getRoot().buildData())
             }}
-            value={data.textAlign}
+            value={data.style.textAlign}
           >
             <option value="left">Left</option>
             <option value="center">Center</option>
@@ -68,10 +66,10 @@ export const EditPanel = ({
           Text align
           <select
             onChange={(e) =>{
-              data.textAlign = e.target.value
+              data.style = Object.assign({}, data.style, {textAlign: e.target.value})
               setCurrentData(item.getRoot().buildData())
             }}
-            value={data.textAlign}
+            value={data.style.textAlign}
           >
             <option value="left">Left</option>
             <option value="center">Center</option>
@@ -86,7 +84,8 @@ export const EditPanel = ({
               if(e.target.files) {
                 e.target.files && uploadImage(e.target.files[0]).then(img => {
                   data.value = img.data.url
-                  if(!data.size) data.size = {width: img.data.width, height: img.data.height}
+                  if(!data.style.width) data.style.width = img.data.width;
+                  if(!data.style.height) data.style.height = img.data.height;
                   setCurrentData(item.getRoot().buildData())
                 })
               }
@@ -100,7 +99,8 @@ export const EditPanel = ({
             onChange={(e) => {
               e.target.value && uploadImage(e.target.value).then(img => {
                 data.value = img.data.url
-                if(!data.size) data.size = {width: img.data.width, height: img.data.height}
+                if(!data.style.width) data.style.width = img.data.width;
+                if(!data.style.height) data.style.height = img.data.height;
                 setCurrentData(item.getRoot().buildData())
               })
             }}
@@ -108,19 +108,19 @@ export const EditPanel = ({
           Width
           <input
             onChange={(e) =>{
-              data.size = Object.assign({}, data.size, {width: +e.target.value})
+              data.style = Object.assign({}, data.style, {width: +e.target.value})
               setCurrentData(item.getRoot().buildData())
             }}
-            value={data?.size?.width}
+            value={data.style.width}
             type="number"
           />
           Height
           <input
             onChange={(e) =>{
-              data.size = Object.assign({}, data.size, {height: +e.target.value})
+              data.style = Object.assign({}, data.style, {height: +e.target.value})
               setCurrentData(item.getRoot().buildData())
             }}
-            value={data?.size?.height}
+            value={data.style.height}
             type="number"
           />
         </div>
@@ -135,22 +135,22 @@ export const EditPanel = ({
             }}
             value={data.value}
           />
-           Width
+          Width
           <input
             onChange={(e) =>{
-              data.size = Object.assign({}, data.size, {width: +e.target.value})
+              data.style = Object.assign({}, data.style, {width: +e.target.value})
               setCurrentData(item.getRoot().buildData())
             }}
-            value={data?.size?.width}
+            value={data.style.width}
             type="number"
           />
           Height
           <input
             onChange={(e) =>{
-              data.size = Object.assign({}, data.size, {height: +e.target.value})
+              data.style = Object.assign({}, data.style, {height: +e.target.value})
               setCurrentData(item.getRoot().buildData())
             }}
-            value={data?.size?.height}
+            value={data.style.height}
             type="number"
           />
         </div>
@@ -160,10 +160,10 @@ export const EditPanel = ({
           Flex direction
           <select
             onChange={(e) =>{
-              data.flexDirection = e.target.value
+              data.style = Object.assign({}, data.style, {flexDirection: e.target.value})
               setCurrentData(item.getRoot().buildData())
             }}
-            value={data.flexDirection}
+            value={data.style.flexDirection}
           >
             <option value="column">Column</option>
             <option value="row">Row</option>
@@ -171,10 +171,10 @@ export const EditPanel = ({
           Justify content
           <select
             onChange={(e) =>{
-              data.justifyContent = e.target.value
+              data.style = Object.assign({}, data.style, {justifyContent: e.target.value})
               setCurrentData(item.getRoot().buildData())
             }}
-            value={data.justifyContent || ""}
+            value={data.style.justifyContent || ""}
           >
             <option value="">Default</option>
             <option value="start">Start</option>
@@ -186,10 +186,10 @@ export const EditPanel = ({
           Align items
           <select
             onChange={(e) =>{
-              data.alignItems = e.target.value
+              data.style = Object.assign({}, data.style, {alignItems: e.target.value})
               setCurrentData(item.getRoot().buildData())
             }}
-            value={data.alignItems || ""}
+            value={data.style.alignItems || ""}
           >
             <option value="">Default</option>
             <option value="start">Start</option>

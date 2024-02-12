@@ -2,52 +2,43 @@ import { RC } from "./RichContent";
 import { IRCEditorProps } from "./Editor/RCEditor.component";
 import styles from "./RichContent.module.scss";
 import classNames from "classnames";
-import { defaultVideo } from "./RichContent";
 
 interface IRichContent {
-  data: RC;
+  item: RC;
   editor?: IRCEditorProps;
 }
 
-export const RichContent = ({ data, editor }: IRichContent) => {
+export const RichContent = ({ item, editor }: IRichContent) => {
   const onDoubleClick = (e: React.BaseSyntheticEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    editor?.setCurrentElement(data);
+    editor?.setCurrentElement(item);
   };
   
   const headerTexteditor = {
     // onSelect: console.log,
     suppressContentEditableWarning: editor && !editor?.moving,
     contentEditable: editor && !editor?.moving,
-    style: { textAlign: data.data?.textAlign } as {
+    style: item.data?.style as {
       [key: string]: string;
     },
     onBlur: (e: React.BaseSyntheticEvent) => {
-      if (data.data.value !== e.target.innerText) {
-        data.data.value = e.target.innerText;
-        editor?.setCurrentData(data.getRoot().buildData());
+      if (item.data.value !== e.target.innerText) {
+        item.data.value = e.target.innerText;
+        editor?.setCurrentData(item.getRoot().buildData());
       }
     },
     onFocus: (e: React.BaseSyntheticEvent) => {
-      if (!data.data?.value) e.target.innerText = "";
+      if (!item.data?.value) e.target.innerText = "";
     },
   };
   
-  const styleContainer: { [key: string]: string } = {
-    flexDirection: data.data?.flexDirection || "row",
-  };
-
-  if (data.data?.justifyContent)
-    styleContainer.justifyContent = data.data?.justifyContent;
-  if (data.data?.alignItems) styleContainer.alignItems = data.data?.alignItems;
-
   return (
     <div
       className={classNames(
         styles.element,
         (editor?.currentDraggable &&
-          data.type !== "container") &&
+          item.type !== "container") &&
           styles.eventsDisabled,
       )}
       draggable={editor?.moving}
@@ -55,47 +46,49 @@ export const RichContent = ({ data, editor }: IRichContent) => {
       onDrag={(e: React.BaseSyntheticEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        editor?.setCurrentDraggable(data);
+        editor?.setCurrentDraggable(item);
       }}
     >
-      {data.type === "header" && (
+      {item.type === "header" && (
         <h1 {...headerTexteditor}>
-          {data.data?.value || (editor ? "Введите заголовок..." : "")}
+          {item.data?.value || (editor ? "Введите заголовок..." : "")}
         </h1>
       )}
-      {data.type === "text" && (
+      {item.type === "text" && (
         <p {...headerTexteditor}>
-          {data.data?.value || (editor ? "Введите текст..." : "")}
+          {item.data?.value || (editor ? "Введите текст..." : "")}
         </p>
       )}
-      {data.type === "image" && (
+      {item.type === "image" && (
         <img
           draggable={false}
-          src={data.data?.value}
-          style={data.data?.size}
+          src={item.data?.value}
+          style={item.data?.style as {[key: string]: string}}
         />
       )}
-      {data.type === "video" && (
+      {item.type === "video" && (
         <>
-          {!data.data.value && (
-            <img src={defaultVideo.value} style={data.data.size} />
+          {!item.data.value && (
+            <img
+              src="https://external-preview.redd.it/JP-CYfhVX3e_n_ilieCSrG4Wdy4Pnn8El5Rxk4DomeM.jpg?width=640&crop=smart&auto=webp&s=695b4a3cd0bcd026a92ed70441f3f2f3aa6cb567"
+              style={item.data?.style as {[key: string]: string}}
+             />
           )}
-          {data.data.value && (
+          {item.data.value && (
             <iframe
-              height={data.data?.size?.height}
-              src={`https://www.youtube.com/embed/${data.data.value.split("=")[1]?.split("&")[0]}`}
-              width={data.data?.size?.width}
+              src={`https://www.youtube.com/embed/${item.data.value.split("=")[1]?.split("&")[0]}`}
+              style={item.data?.style as {[key: string]: string}}
             />
           )}
         </>
       )}
-      {data.type === "container" && (
+      {item.type === "container" && (
         <div
           className={styles.container}
           onDragEnter={(e: React.BaseSyntheticEvent) => {
             e.preventDefault();
             e.stopPropagation();
-            if (editor?.currentDraggable && !data.same(editor.currentDraggable)) // && !data.same(editor.currentDraggable)
+            if (editor?.currentDraggable && !item.same(editor.currentDraggable))
               e.target.classList.add(styles.active);
           }}
           onDragLeave={(e: React.BaseSyntheticEvent) => {
@@ -113,29 +106,31 @@ export const RichContent = ({ data, editor }: IRichContent) => {
             if (editor?.currentDraggable) {
               e.target.classList.remove(styles.active);
               if ("destroy" in editor.currentDraggable) {
-                if (data.include(editor.currentDraggable)) {
+                if (item.include(editor.currentDraggable)) {
                   editor.setCurrentDraggable(null);
 
                   return;
                 }
                 editor.currentDraggable.destroy()
               }
-              if (!data.items) data.items = [];
-              data.items.push(editor.currentDraggable);
-              editor.setCurrentData(data.getRoot().buildData());
+              if (!item.items) item.items = [];
+              item.items.push(editor.currentDraggable);
+              editor.setCurrentData(item.getRoot().buildData());
               editor.setCurrentDraggable(null);
             }
           }}
-          style={styleContainer}
+          style={{ display: 'flex', width: '100%', height: '100%', ...item.data.style as {
+            [key: string]: string;
+          }}}
         >
-          {data.richItems.map((item, index) => (
+          {item.richItems.map((child, index) => (
               <RichContent
-                key={`${index}${Math.random()}${data.type}`}
-                data={item}
+                key={`${index}${Math.random()}${item.type}`}
+                item={child}
                 editor={editor}
               />
             ))}
-          {(data.type === 'container' && data.richItems.length === 0) &&
+          {(item.type === 'container' && item.richItems.length === 0) &&
             (editor ? "Пустой контейнер..." : "")}
         </div>
       )}

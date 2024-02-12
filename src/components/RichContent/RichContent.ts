@@ -3,13 +3,13 @@ import { stringify } from "../../utils/misc.ts";
 
 export interface IRCData {
   value?: string;
-  flexDirection?: string;
-  justifyContent?: string;
-  alignItems?: string;
-  textAlign?: string;
-  size?: {
-    width: number;
-    height: number;
+  style: {
+    flexDirection?: string;
+    justifyContent?: string;
+    alignItems?: string;
+    textAlign?: string;
+    width?: number;
+    height?: number;
   };
 }
 
@@ -22,25 +22,9 @@ export interface IRC {
 export const defaultValue = {
   type: "container" as tContentType,
   data: {
-    flexDirection: "column",
-  },
-};
-
-export const defaultImage = {
-  value:
-    "https://cdn3.iconfinder.com/data/icons/online-states/150/Photos-512.png",
-  size: {
-    width: 360,
-    height: 360,
-  },
-};
-
-export const defaultVideo = {
-  value:
-    "https://external-preview.redd.it/JP-CYfhVX3e_n_ilieCSrG4Wdy4Pnn8El5Rxk4DomeM.jpg?width=640&crop=smart&auto=webp&s=695b4a3cd0bcd026a92ed70441f3f2f3aa6cb567",
-  size: {
-    width: 640,
-    height: 360,
+    style: {
+      flexDirection: "column",
+    },
   },
 };
 

@@ -8,6 +8,7 @@ import { EditPanel } from "./EditPanel.component";
 import styles from "../RichContent.module.scss";
 import classNames from "classnames";
 import { Toggle } from "../../Toggle/toggle.component";
+import { renderToStaticMarkup } from "react-dom/server";
 
 export interface IRCEditorProps {
   setCurrentData: (data: IRC) => void;
@@ -75,7 +76,7 @@ const RichContentEditor = ({
             onChange={(val) => setShowPreview(val)}
           />
           <button onClick={() => console.log(currentData.buildData())}>Schema</button>
-          <button onClick={() => console.log('comming soon')}>HTML</button>
+          <button onClick={() => console.log(renderToStaticMarkup(<RichContent item={currentData} />))}>HTML</button>
           <button
             onClick={() => {
               const newData = prompt("Put new schema here:")
@@ -92,7 +93,7 @@ const RichContentEditor = ({
           </button>
         </div>
       </div>
-      {showPreview && <RichContent data={currentData} />}
+      {showPreview && <RichContent item={currentData} />}
       {!showPreview && (
         <div className={styles.view}>
           <div className={styles.leftSide}>
@@ -103,7 +104,7 @@ const RichContentEditor = ({
               )}
             >
               <RichContent
-                data={currentData}
+                item={currentData}
                 editor={{
                   setCurrentElement,
                   setCurrentData,
