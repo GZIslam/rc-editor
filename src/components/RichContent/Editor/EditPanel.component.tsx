@@ -17,9 +17,12 @@ export const EditPanel = ({
   return (
     <div className={styles.editPanel}>
       <div className={styles.header}>
-        <h1 style={{ display: "flex", justifyContent: "space-between" }}>
-          {type}
-        </h1>
+        <div className={styles.title}>
+          <img width={40} height={40} alt="" src={`./images/${type}.png`} />
+          <h2>
+            {type}
+          </h2>
+        </div>
         <button
             onClick={() => {
             setCurrentData(item.destroy());

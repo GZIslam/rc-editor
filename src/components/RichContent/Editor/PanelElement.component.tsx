@@ -31,7 +31,7 @@ export const PanelElement = ({ type, setCurrentDraggable }: IPanelElement) => {
       }}
       title={type}
     >
-      <img src={`./images/${type}.png`} />
+      <img width={40} height={40} src={`./images/${type}.png`} />
     </li>
   );
 };
