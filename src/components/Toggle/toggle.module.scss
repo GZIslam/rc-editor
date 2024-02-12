@@ -1,0 +1,14 @@
+.toogle {
+    padding: 6px 12px;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    border-radius: 8px;
+    border: 2px solid #96c362;
+    color: #96c362;
+    &.checked {
+        background-color: #96c362;
+        color: white;
+    }
+}

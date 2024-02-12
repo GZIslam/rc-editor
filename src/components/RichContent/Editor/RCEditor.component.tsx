@@ -7,6 +7,7 @@ import { PanelElement } from "./PanelElement.component";
 import { EditPanel } from "./EditPanel.component";
 import styles from "../RichContent.module.scss";
 import classNames from "classnames";
+import { Toggle } from "../../Toggle/toggle.component";
 
 export interface IRCEditorProps {
   setCurrentData: (data: IRC) => void;
@@ -55,29 +56,40 @@ const RichContentEditor = ({
                 />
               ))}
             </ul>
-            Hide borders
-            <input
-              type="checkbox"
-              // defaultChecked={hideBorders}
-              onChange={(e) => setHideBorders(e.target.checked)}
+            <Toggle
+              title={'Hide borders'}
+              onChange={(val) => setHideBorders(val)}
               checked={hideBorders}
             />
-            Moving
-            <input
-              type="checkbox"
-              // defaultChecked={moving}
-              onChange={(e) => setMoving(e.target.checked)}
+            <Toggle
+              title={'Moving'}
+              onChange={(val) => setMoving(val)}
               checked={moving}
             />
           </>
         )}
         <div className={styles.controls}>
-          Preview
-          <input
-            type="checkbox"
-            onChange={(e) => setShowPreview(e.target.checked)}
+          <Toggle
+            title="Preview"
             checked={showPreview}
+            onChange={(val) => setShowPreview(val)}
           />
+          <button onClick={() => console.log(currentData.buildData())}>Schema</button>
+          <button onClick={() => console.log('comming soon')}>HTML</button>
+          <button
+            onClick={() => {
+              const newData = prompt("Put new schema here:")
+              newData && setCurrentData(JSON.parse(newData))
+            }}
+          >
+            Set
+          </button>
+          <button
+            // style={{backgroundColor: 'indianred', color: 'white'}}
+            onClick={() => setCurrentData(defaultValue)}
+          >
+            Clear
+          </button>
         </div>
       </div>
       {showPreview && <RichContent data={currentData} />}

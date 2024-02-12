@@ -1,4 +1,4 @@
-export const uploadImage = (file: Blob) => {
+export const uploadImage = (file: Blob | string) => {
     const form = new FormData();
     form.append('image', file)
     return fetch('https://api.imgbb.com/1/upload?key=4f7ac27aa97fb5ccdeefca54c0864f8f', {

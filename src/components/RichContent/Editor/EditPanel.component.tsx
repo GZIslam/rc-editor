@@ -83,7 +83,6 @@ export const EditPanel = ({
         <div className={styles.fields}>
           <input
             onChange={(e) =>{
-              console.log(e.target)
               if(e.target.files) {
                 e.target.files && uploadImage(e.target.files[0]).then(img => {
                   data.value = img.data.url
@@ -95,22 +94,33 @@ export const EditPanel = ({
             type="file"
             title="Image"
           />
+          Link
+          <input
+            type="text"
+            onChange={(e) => {
+              e.target.value && uploadImage(e.target.value).then(img => {
+                data.value = img.data.url
+                if(!data.size) data.size = {width: img.data.width, height: img.data.height}
+                setCurrentData(item.getRoot().buildData())
+              })
+            }}
+          />
           Width
           <input
-            onBlur={(e) =>{
+            onChange={(e) =>{
               data.size = Object.assign({}, data.size, {width: +e.target.value})
               setCurrentData(item.getRoot().buildData())
             }}
-            defaultValue={data?.size?.width}
+            value={data?.size?.width}
             type="number"
           />
           Height
           <input
-            onBlur={(e) =>{
+            onChange={(e) =>{
               data.size = Object.assign({}, data.size, {height: +e.target.value})
               setCurrentData(item.getRoot().buildData())
             }}
-            defaultValue={data?.size?.height}
+            value={data?.size?.height}
             type="number"
           />
         </div>
@@ -127,20 +137,20 @@ export const EditPanel = ({
           />
            Width
           <input
-            onBlur={(e) =>{
+            onChange={(e) =>{
               data.size = Object.assign({}, data.size, {width: +e.target.value})
               setCurrentData(item.getRoot().buildData())
             }}
-            defaultValue={data?.size?.width}
+            value={data?.size?.width}
             type="number"
           />
           Height
           <input
-            onBlur={(e) =>{
+            onChange={(e) =>{
               data.size = Object.assign({}, data.size, {height: +e.target.value})
               setCurrentData(item.getRoot().buildData())
             }}
-            defaultValue={data?.size?.height}
+            value={data?.size?.height}
             type="number"
           />
         </div>

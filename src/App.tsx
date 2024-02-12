@@ -1,13 +1,11 @@
 import { useState } from "react";
-import { demoPositions } from "./components/RichContent/mokki";
+import { demo } from "./components/RichContent/mokki";
 import RichContentEditor from "./components/RichContent/Editor/RCEditor.component";
 
 function App() {
-  const [data, setData] = useState(demoPositions);
-
+  const [data, setData] = useState(demo);
   return (
     <>
-      <h1>rc-editor:</h1>
       <RichContentEditor data={data} setCurrentData={setData} />
     </>
   );

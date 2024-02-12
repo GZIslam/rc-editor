@@ -8,12 +8,15 @@
   .toolPanel {
     height: 86px;
     display: flex;
+    gap: 10px;
     align-items: center;
 
     .controls {
       display: flex;
       flex: 1;
+      align-items: center;
       justify-content: right;
+      gap: 10px;
     }
 
     ul {
