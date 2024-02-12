@@ -1,4 +1,4 @@
-import { tContentType } from "../RichContent";
+import { defaultImage, defaultVideo, tContentType } from "../RichContent";
 import { IRC } from "../RichContent";
 import styles from "../RichContent.module.scss";
 
@@ -12,17 +12,17 @@ export const PanelElement = ({ type, setCurrentDraggable }: IPanelElement) => {
     <li
       className={styles.panelElement}
       draggable
-      onDrag={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
+      onDragStart={() => {
         const current: IRC = { type, data: {} };
         if (type === "container") current.data = { flexDirection: "row" };
+        if (type === "image") current.data = defaultImage
+        if (type === "video") current.data.size = defaultVideo.size
+        if (type === "header" || type === "text") current.data.textAlign = 'left'
         setCurrentDraggable(current);
       }}
       title={type}
     >
-      {/* <img src={`/icons/richContent/${type}.svg`} /> */}
-      {type}
+      <img src={`./images/${type}.png`} />
     </li>
   );
 };

@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { defaultImage, defaultVideo } from "../RichContent";
+// import { useState } from "react";
+// import { defaultImage, defaultVideo } from "../RichContent";
+import { uploadImage } from "../../../methods/uploadImage";
 import { RC, IRC } from "../RichContent";
 import styles from "../RichContent.module.scss";
 
@@ -15,44 +16,62 @@ export const EditPanel = ({
   setCurrentElement,
 }: IEditPanel) => {
   const { type, data } = item;
-  const [value, setValue] = useState(data.value);
-  const [flexDirection, setFlexDirection] = useState(
-    data?.flexDirection || "row",
-  );
-  const [justifyContent, setJustifyContent] = useState(
-    data?.justifyContent || "",
-  );
-  const [alignItems, setAlignItems] = useState(data?.alignItems || "");
-  const [textAlign, setTextAlign] = useState(data?.textAlign || "left");
-  const [width, setWidth] = useState(data?.size?.width);
-  const [height, setHeight] = useState(data?.size?.height);
-
   return (
-    <>
-      <h1 style={{ display: "flex", justifyContent: "space-between" }}>
-        {type}
-      </h1>
-      <button
-          onClick={() => {
-          setCurrentData(item.destroy());
-          setCurrentElement(null);
-          }}
-      >
-          <img alt="" src="/icons/deleteRedIcon.svg" />
-      </button>
-      {(type === "header" || type === "text") && (
-        <div>
+    <div className={styles.editPanel}>
+      <div className={styles.header}>
+        <h1 style={{ display: "flex", justifyContent: "space-between" }}>
+          {type}
+        </h1>
+        <button
+            onClick={() => {
+            setCurrentData(item.destroy());
+            setCurrentElement(null);
+            }}
+        >
+            <img alt="" src="./images/delete.png" />
+        </button>
+      </div>
+      {type === "header" && (
+        <div className={styles.fields}>
           Value
           <input
-            // fullWidth
-            onChange={(e) => setValue(e.target.value)}
-            value={value}
+            onChange={(e) =>{
+              data.value = e.target.value
+              setCurrentData(item.getRoot().buildData())
+            }}
+            value={data.value}
           />
           Text align
           <select
-            // fullWidth
-            onChange={(e) => setTextAlign(e.target.value)}
-            value={textAlign}
+            onChange={(e) =>{
+              data.textAlign = e.target.value
+              setCurrentData(item.getRoot().buildData())
+            }}
+            value={data.textAlign}
+          >
+            <option value="left">Left</option>
+            <option value="center">Center</option>
+            <option value="right">Right</option>
+          </select>
+        </div>
+      )}
+      {type === "text" && (
+        <div className={styles.fields}>
+          Value
+          <textarea
+            onChange={(e) =>{
+              data.value = e.target.value
+              setCurrentData(item.getRoot().buildData())
+            }}
+            value={data.value}
+          />
+          Text align
+          <select
+            onChange={(e) =>{
+              data.textAlign = e.target.value
+              setCurrentData(item.getRoot().buildData())
+            }}
+            value={data.textAlign}
           >
             <option value="left">Left</option>
             <option value="center">Center</option>
@@ -61,79 +80,91 @@ export const EditPanel = ({
         </div>
       )}
       {type === "image" && (
-        <div>
-          {/* <UploadImageWidget
-              onChange={(val) => {
-                data.value = val;
-                setCurrentData(item.getRoot().buildData());
-              }}
-              title="Image"
-              value={value}
-            /> */}
+        <div className={styles.fields}>
           <input
-            onChange={(e) => {
-              data.value = e.target.value;
-              setCurrentData(item.getRoot().buildData());
+            onChange={(e) =>{
+              console.log(e.target)
+              if(e.target.files) {
+                e.target.files && uploadImage(e.target.files[0]).then(img => {
+                  data.value = img.data.url
+                  if(!data.size) data.size = {width: img.data.width, height: img.data.height}
+                  setCurrentData(item.getRoot().buildData())
+                })
+              }
             }}
+            type="file"
             title="Image"
-            value={value}
           />
           Width
           <input
-            // fullWidth
-            onChange={(e) => setWidth(+e.target.value)}
+            onBlur={(e) =>{
+              data.size = Object.assign({}, data.size, {width: +e.target.value})
+              setCurrentData(item.getRoot().buildData())
+            }}
+            defaultValue={data?.size?.width}
             type="number"
-            value={width}
           />
           Height
           <input
-            // fullWidth
-            onChange={(e) => setHeight(+e.target.value)}
+            onBlur={(e) =>{
+              data.size = Object.assign({}, data.size, {height: +e.target.value})
+              setCurrentData(item.getRoot().buildData())
+            }}
+            defaultValue={data?.size?.height}
             type="number"
-            value={height}
           />
         </div>
       )}
       {type === "video" && (
-        <div>
+        <div className={styles.fields}>
           Video link
           <input
-            // fullWidth
-            onChange={(e) => setValue(e.target.value)}
-            value={value}
+            onChange={(e) =>{
+              data.value = e.target.value
+              setCurrentData(item.getRoot().buildData())
+            }}
+            value={data.value}
           />
-          Width
+           Width
           <input
-            // fullWidth
-            onChange={(e) => setWidth(+e.target.value)}
+            onBlur={(e) =>{
+              data.size = Object.assign({}, data.size, {width: +e.target.value})
+              setCurrentData(item.getRoot().buildData())
+            }}
+            defaultValue={data?.size?.width}
             type="number"
-            value={width}
           />
           Height
           <input
-            // fullWidth
-            onChange={(e) => setHeight(+e.target.value)}
+            onBlur={(e) =>{
+              data.size = Object.assign({}, data.size, {height: +e.target.value})
+              setCurrentData(item.getRoot().buildData())
+            }}
+            defaultValue={data?.size?.height}
             type="number"
-            value={height}
           />
         </div>
       )}
       {type === "container" && (
-        <div>
+        <div className={styles.fields}>
           Flex direction
           <select
-            // fullWidth
-            onChange={(e) => setFlexDirection(e.target.value)}
-            value={flexDirection}
+            onChange={(e) =>{
+              data.flexDirection = e.target.value
+              setCurrentData(item.getRoot().buildData())
+            }}
+            value={data.flexDirection}
           >
             <option value="column">Column</option>
             <option value="row">Row</option>
           </select>
           Justify content
           <select
-            // fullWidth
-            onChange={(e) => setJustifyContent(e.target.value)}
-            value={justifyContent}
+            onChange={(e) =>{
+              data.justifyContent = e.target.value
+              setCurrentData(item.getRoot().buildData())
+            }}
+            value={data.justifyContent || ""}
           >
             <option value="">Default</option>
             <option value="start">Start</option>
@@ -144,9 +175,11 @@ export const EditPanel = ({
           </select>
           Align items
           <select
-            // fullWidth
-            onChange={(e) => setAlignItems(e.target.value)}
-            value={alignItems}
+            onChange={(e) =>{
+              data.alignItems = e.target.value
+              setCurrentData(item.getRoot().buildData())
+            }}
+            value={data.alignItems || ""}
           >
             <option value="">Default</option>
             <option value="start">Start</option>
@@ -155,55 +188,6 @@ export const EditPanel = ({
           </select>
         </div>
       )}
-      <div className={styles.buttons}>
-        <button
-          color="primary"
-          // fullWidth
-          onClick={() => {
-            data.value = value;
-
-            if (type === "container") {
-              data.justifyContent = justifyContent;
-              data.flexDirection = flexDirection;
-              data.alignItems = alignItems;
-            }
-
-            if (type === "header" || type === "text") {
-              data.textAlign = textAlign;
-            }
-
-            if (type === "image") {
-              if (!data.size) {
-                data.size = {
-                  width: width || defaultImage.size.width,
-                  height: height || defaultImage.size.height,
-                };
-              }
-              data.size.width = width || defaultImage.size.width;
-              data.size.height = height || defaultImage.size.height;
-            }
-            if (type === "video") {
-              if (!data.size) {
-                data.size = {
-                  width: width || defaultVideo.size.width,
-                  height: height || defaultVideo.size.height,
-                };
-              }
-              data.size.width = width || defaultVideo.size.width;
-              data.size.height = height || defaultVideo.size.height;
-            }
-            const fullData = item.getRoot().buildData();
-
-            // dev
-            console.log("Data:", fullData);
-
-            setCurrentData(fullData);
-          }}
-          // variant="contained"
-        >
-          Ok
-        </button>
-      </div>
-    </>
+    </div>
   );
 };

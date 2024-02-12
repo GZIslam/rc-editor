@@ -1,6 +1,6 @@
 .root {
   display: flex;
-  flex: 1;
+  width: 100%;
   flex-direction: column;
   min-height: 700px;
   padding: 0 0 20px 0;
@@ -21,10 +21,6 @@
       list-style: none;
       display: flex;
       align-items: center;
-
-      li:last-child {
-        background-color: rgb(255, 64, 0);
-      }
 
       .panelElement {
         cursor: grab;
@@ -87,14 +83,7 @@
 
     .rightSide {
       min-width: 300px;
-      padding-left: 10px;
-
-      .buttons {
-        margin-top: 20px;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-      }
+      padding: 0 10px;
     }
   }
 }
@@ -103,7 +92,6 @@
   position: relative;
   margin: 2px;
   padding: 2px;
-
   // width: fit-content;
   .container {
     width: 100%;
@@ -117,10 +105,44 @@
       opacity: .7;
     }
   }
-
   h1,
   p {
     min-width: 80px;
     margin: 0;
+  }
+}
+
+.editPanel {
+  .fields {
+    display: flex;
+    flex-direction: column;
+    input, select, textarea {
+      padding: 8px;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    h1 {
+      margin: 0;
+    }
+    button {
+      padding: 6px;
+      height: fit-content;
+      img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+  .buttons {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
   }
 }
